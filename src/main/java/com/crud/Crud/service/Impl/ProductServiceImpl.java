@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Optional<Product> findProductById(long id) {
+	public Optional<Product> findProductById(Long id) {
 		return productRepository.findById(id);
 
 	}
@@ -35,5 +35,10 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product saveProduct(Product productWithId) {
 		return productRepository.save(productWithId);
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		productRepository.deleteById(id);
 	}
 }

@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,4 +84,18 @@ public class ProductController {
 						.notFound().build());
 	}
 	
+	@Operation(summary = "Delete a product by id", description = "Delete a product as per the id")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Successfully Deletd"), 
+	        @ApiResponse(responseCode = "404", description = "Not found - The product was not found")
+	    })
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Product> deleteProduct(@RequestParam(name = "productId") Long id){
+		return productService.findProductById(id)
+		.map(product -> {
+			productService.deleteById(id);
+			return ResponseEntity.ok(product);
+		}).orElseGet(() -> ResponseEntity
+						.notFound().build());
+	}
 }
