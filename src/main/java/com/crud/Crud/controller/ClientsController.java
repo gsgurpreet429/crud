@@ -27,23 +27,23 @@ public class ClientsController {
         this.clientRepository = clientRepository;
     }
 
-    @GetMapping
+    @GetMapping("/getAllClients")
     public List<Client> getClients() {
         return clientRepository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getClientByid")
     public Client getClient(@RequestParam(name = "id") Long id) {
         return clientRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
-    @PostMapping
+    @PostMapping("/addClient")
     public ResponseEntity<Client> createClient(@RequestBody Client client) throws URISyntaxException {
         Client savedClient = clientRepository.save(client);
         return ResponseEntity.created(new URI("/clients/" + savedClient.getId())).body(savedClient);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updateClient")
     public ResponseEntity<Client> updateClient(@RequestParam(name = "id") Long id, @RequestBody Client client) {
         Client currentClient = clientRepository.findById(id).orElseThrow(RuntimeException::new);
         currentClient.setName(client.getName());
@@ -53,7 +53,7 @@ public class ClientsController {
         return ResponseEntity.ok(currentClient);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteClient")
     public ResponseEntity<Client> deleteClient(@RequestParam(name = "id") Long id) {        
         return clientRepository.findById(id)
         		.map(client -> {
